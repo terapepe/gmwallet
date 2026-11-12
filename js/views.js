@@ -159,6 +159,11 @@
         </div>
       </section>
 
+      ${(CFG.comingSoon || []).length ? `<section class="block">
+        <h3><span class="h-pr">06</span> Coming soon</h3>
+        <div class="soon-grid">${CFG.comingSoon.map(soonCard).join("")}</div>
+      </section>` : ""}
+
       <section class="block cta">
         <div><b>gm.</b> Follow ${esc(CFG.social.xHandle)} for the CA, updates and new networks.</div>
         <a class="btn primary" href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${UI.xIcon} Follow on X</a>
@@ -432,6 +437,11 @@
         ["My balance changed but the gate still says locked.", "Press Re-check. Balances are read live, but RPC nodes can lag by a few seconds."],
         ["Is this financial advice?", "No. Prices are estimates from public markets. Always do your own research."],
       ].map(([q, a]) => `<details class="faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")],
+      ["roadmap", "Coming soon", `
+        <p>New tools are on the way. They will follow the same rules as today: read-only, no keys, no signatures.</p>
+        ${(CFG.comingSoon || []).map((f) => `<p><b>${esc(f.icon || "")} ${esc(f.name)}</b> <span class="soon">soon</span><br>${esc(f.summary)}</p>
+        <ul>${f.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`).join("")}
+        <p class="muted">Launch dates will be announced on <a href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${esc(CFG.social.xHandle)}</a>.</p>`],
       ["links", "Links", `
         <ul><li>X: <a href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${esc(CFG.social.xHandle)}</a></li><li>Website: ${esc(CFG.brand.domain)}</li></ul>
         <p class="muted">Keyboard: <kbd>/</kbd> quick check · <kbd>n</kbd> new check · <kbd>m</kbd> multi · <kbd>d</kbd> docs · <kbd>h</kbd> home</p>`],
@@ -444,5 +454,38 @@
     if (arg && $("#d-" + arg)) setTimeout(() => $("#d-" + arg).scrollIntoView(), 30);
   }
 
-  window.Views = { home, check, multi, docs };
+  /* ================= coming soon ================= */
+
+  function soonCard(f) {
+    return `<a class="soon-card" href="#/soon/${esc(f.id)}">
+      <div class="sc-h"><span class="fi">${esc(f.icon || "+")}</span><b>${esc(f.name)}</b><span class="soon">soon</span></div>
+      <p>${esc(f.summary)}</p></a>`;
+  }
+
+  function soon(v, arg) {
+    const list = CFG.comingSoon || [], f = list.find((x) => x.id === arg) || list[0];
+    if (!f) { location.hash = "#/"; return; }
+    App.setTitle(f.name, "");
+    v.innerHTML = `
+      <div class="soon-hero">
+        <div class="term">
+          <div class="term-bar"><span class="dots"><i></i><i></i><i></i></span><span>gm@wallet: ~</span></div>
+          <div class="term-body"><div>$ gm ${esc(f.id)} --status</div><div class="dim">${esc(f.name)}</div><div class="ok">status: in development</div><div class="dim">eta: announced on ${esc(CFG.social.xHandle)}</div><div>$ <span class="cursor">█</span></div></div>
+        </div>
+        <div>
+          <span class="soon big">coming soon</span>
+          <h2>${esc(f.name)}</h2>
+          <p class="lead">${esc(f.summary)}</p>
+          <ul class="soon-list">${f.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+          <div class="hero-links">
+            <a class="btn primary" href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${UI.xIcon} Get notified on X</a>
+            <a href="#/check">Use Single check now →</a>
+          </div>
+        </div>
+      </div>
+      ${list.length > 1 ? `<section class="block"><h3><span class="h-pr">+</span> Also coming</h3>
+        <div class="soon-grid">${list.filter((x) => x !== f).map(soonCard).join("")}</div></section>` : ""}`;
+  }
+
+  window.Views = { home, check, multi, docs, soon };
 })();

@@ -45,6 +45,8 @@
         <li><a href="#/docs/networks" title="${esc(n.tagline)}">
           <span class="caret">▸</span>${UI.netIcon(n, 16)}<span>${esc(n.name)}</span>
           <span class="net-type">${n.type === "solana" ? "SVM" : "EVM"}</span></a></li>`).join("");
+      $("#navSoon").outerHTML = (CFG.comingSoon || []).map((f) =>
+        `<a href="#/soon/${esc(f.id)}" data-r="soon-${esc(f.id)}"><span class="ni">${esc(f.icon || "+")}</span> ${esc(f.name)} <span class="soon">soon</span></a>`).join("");
       $("#sideCA").innerHTML = UI.caBlock("pill");
       $("#tbCA").innerHTML = UI.caBlock("pill");
       const x = $("#xLink"); x.href = CFG.social.x; x.innerHTML = `${UI.xIcon} ${esc(CFG.social.xHandle)}`;
@@ -57,9 +59,10 @@
 
     go() {
       const [, r = "", ...rest] = (location.hash || "#/").split("/");
-      App.route = ({ "": "home", check: "check", multi: "multi", docs: "docs" })[r] || "home";
+      App.route = ({ "": "home", check: "check", multi: "multi", docs: "docs", soon: "soon" })[r] || "home";
       App.arg = decodeURIComponent(rest.join("/") || "");
-      $$("#nav a").forEach((a) => a.classList.toggle("on", a.dataset.r === App.route));
+      const key = App.route === "soon" ? "soon-" + App.arg : App.route;
+      $$("#nav a").forEach((a) => a.classList.toggle("on", a.dataset.r === key));
       document.body.classList.remove("nav-open");
       App.renderFilter();
       Views[App.route]($("#view"), App.arg);

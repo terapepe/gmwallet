@@ -248,6 +248,20 @@ textarea:focus { border-color: var(--net); }
 .faq summary { cursor: pointer; color: #eafff1; } .faq summary::marker { color: var(--net); }
 .faq p { margin: 8px 0 0; }
 
+/* ---------- coming soon ---------- */
+.soon { margin-left: auto; font-size: 10px; color: #000; background: var(--warn); padding: 0 5px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+.soon.big { font-size: 11px; padding: 2px 8px; margin: 0; }
+.soon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.soon-card { display: block; border: 1px dashed var(--line2); border-radius: var(--r); padding: 16px; background: var(--panel2); color: var(--txt); }
+.soon-card:hover { border-color: var(--warn); text-decoration: none; }
+.soon-card p { color: var(--mut); margin: 8px 0 0; font-size: 13px; }
+.sc-h { display: flex; align-items: center; }
+.soon-hero { display: grid; grid-template-columns: 1fr 1.1fr; gap: 26px; align-items: center; margin-bottom: 34px; }
+.soon-hero h2 { font-size: clamp(26px, 3.4vw, 40px); margin: 12px 0 8px; color: #f1fff6; }
+.soon-hero .term-body { min-height: 180px; }
+.soon-list { margin: 0 0 18px; padding-left: 18px; color: #a8d6b9; } .soon-list li::marker { content: "› "; color: var(--warn); }
+@media (max-width: 1080px) { .soon-hero { grid-template-columns: 1fr; } .soon-hero > div:last-child { order: -1; } }
+
 /* ---------- modal & toast ---------- */
 .modal { background: var(--panel); color: var(--txt); border: 1px solid var(--line2); border-radius: 12px; padding: 18px; width: min(420px, 92vw); }
 .modal::backdrop { background: rgba(0, 0, 0, .7); backdrop-filter: blur(3px); }

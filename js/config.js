@@ -31,6 +31,34 @@ window.GM_CONFIG = {
   singleNetwork: "robinhood", // robinhood | solana | base | bsc (CA networks)
   multiOrder: ["solana", "robinhood", "base", "bsc"],
 
+  /** Upcoming features (shown with a "soon" tag in the sidebar, overview and docs). */
+  comingSoon: [
+    {
+      id: "airdrop",
+      name: "Airdrop Check",
+      icon: "✦",
+      summary: "See which airdrops a wallet can claim — across every supported network, in one scan.",
+      points: [
+        "Eligibility check for live and upcoming airdrops",
+        "Claimable amounts with live USD value",
+        "Claim deadlines so nothing expires unnoticed",
+        "Works with EVM and Solana wallets, multi-wallet for holders",
+      ],
+    },
+    {
+      id: "deploy",
+      name: "Token Deploy Check",
+      icon: "⌁",
+      summary: "Paste a token CA and see who deployed it, when, and what else that deployer launched.",
+      points: [
+        "Deployer wallet, deploy time and funding source",
+        "Every other token launched by the same deployer",
+        "Contract flags: mint authority, ownership, freeze, taxes",
+        "Quick risk summary before you ape in",
+      ],
+    },
+  ],
+
   /** Multi-wallet check access rule. */
   gate: {
     enabled: true,

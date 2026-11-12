@@ -36,6 +36,7 @@ Every brand, token and network setting lives in this one file.
 | `mode` | CA display: `"single"` shows only the CA of `singleNetwork` and themes the site for it. `"multi"` shows the CA for all 4 $GMW networks |
 | `singleNetwork` | `solana` \| `robinhood` \| `base` \| `bsc` |
 | `multiOrder` | CA network order in multi mode |
+| `comingSoon` | Upcoming features (name, icon, summary, points) shown with a "soon" tag. Remove an item when it launches |
 | `gate.enabled` / `gate.minHolding` | Multi-check access rule (default 1,000,000 GMW) |
 | `limits.maxWallets` / `limits.concurrency` | Multi-check limits |
 | `networks.<id>` | `checkOnly: true` = checked for balances but never shows a CA (Ethereum). Also `name`, `short`, `color`, `color2`, `tagline`, `icon`, `rpcUrls` (tried in order), `explorer`, `ca` (per-network override) |
