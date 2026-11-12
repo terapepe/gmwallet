@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GM Wallet — multi-chain wallet balance checker</title>
+  <meta name="description" content="GM Wallet: a fast, read-only wallet balance checker for Solana, Robinhood Chain, Base and BNB Smart Chain. Powered by $GM.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="GM Wallet">
+  <meta property="og:description" content="Say GM to your balances. Read-only multi-chain wallet checker.">
+  <meta property="og:image" content="assets/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@GMwallet">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="scan" aria-hidden="true"></div>
+
+  <div class="window">
+    <aside class="sidebar" id="sidebar">
+      <div class="chrome">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <span class="chrome-nav">
+          <button class="ico" onclick="history.back()" title="Back">&larr;</button>
+          <button class="ico" onclick="history.forward()" title="Forward">&rarr;</button>
+        </span>
+      </div>
+
+      <a class="brand" href="#/">
+        <img src="assets/logo.svg" width="30" height="30" alt="">
+        <span class="brand-name" id="brandName">GM Wallet</span>
+        <span class="status-dot" id="statusDot" title="Wallet not connected"></span>
+      </a>
+
+      <div class="side-actions">
+        <a class="btn new" href="#/check"><span class="pr">&gt;_</span> New check</a>
+        <button class="btn sq" id="searchBtn" title="Quick check ( / )">
+          <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <nav class="nav" id="nav">
+        <a href="#/" data-r="home"><span class="ni">~</span> Overview</a>
+        <a href="#/check" data-r="check"><span class="ni">$</span> Single check <span class="free">free</span></a>
+        <a href="#/multi" data-r="multi"><span class="ni">#</span> Multi check <span class="lock" id="navLock">🔒</span></a>
+        <a href="#/docs" data-r="docs"><span class="ni">?</span> Docs</a>
+      </nav>
+
+      <div class="side-title">Networks</div>
+      <ul class="net-list" id="netList"></ul>
+
+      <div class="side-title" id="recentTitle" hidden>Recent</div>
+      <ul class="recent" id="recentList"></ul>
+
+      <div class="side-foot">
+        <div id="sideCA"></div>
+        <a class="x-link" id="xLink" target="_blank" rel="noopener"></a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="ico menu" id="menuBtn" aria-label="Menu">≡</button>
+        <h1 class="tb-title" id="tbTitle">Overview</h1>
+        <span class="tb-count" id="tbCount"></span>
+        <div class="tb-filter" id="tbFilter"></div>
+        <div class="tb-right">
+          <div id="tbCA" class="tb-ca"></div>
+          <button class="btn wallet-btn" id="walletBtn">Connect</button>
+        </div>
+      </header>
+      <section class="view" id="view"></section>
+      <footer class="foot" id="foot"></footer>
+    </main>
+  </div>
+
+  <dialog class="modal" id="walletModal">
+    <div class="modal-head">
+      <span>&gt; select wallet</span>
+      <button class="ico" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <p class="muted small">Read-only connection. GM Wallet only reads your public address to verify your $GM balance — it never asks you to sign or send anything.</p>
+    <div id="walletOptions" class="wallet-options"></div>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/chain.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

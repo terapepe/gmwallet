@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs><radialGradient id="r" cx="80%" cy="0%" r="80%"><stop offset="0" stop-color="#3dff8f" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
+  <rect width="1200" height="630" fill="#000"/><rect width="1200" height="630" fill="url(#r)"/>
+  <g transform="translate(90 120) scale(3)">
+    <rect x="2" y="2" width="60" height="60" rx="14" fill="#020604" stroke="#3dff8f" stroke-width="2"/>
+    <g stroke="#3dff8f" stroke-linecap="round" fill="none"><path d="M17 41a15 15 0 0 1 30 0" stroke-width="4"/><path d="M32 14v5M17.3 20.3l3.5 3.5M46.7 20.3l-3.5 3.5M10 34h4M50 34h4" stroke-width="3"/><path d="M26 29l5 4-5 4" stroke-width="3" stroke-linejoin="round"/></g>
+    <rect x="12" y="45" width="40" height="4" rx="2" fill="#3dff8f"/><rect x="34" y="34" width="6" height="3" rx="1" fill="#3dff8f"/>
+  </g>
+  <g font-family="JetBrains Mono, ui-monospace, Menlo, monospace">
+    <text x="330" y="215" font-size="84" font-weight="700" fill="#eafff1">GM Wallet<tspan fill="#3dff8f">_</tspan></text>
+    <text x="330" y="280" font-size="34" fill="#3dff8f">Say GM to your balances.</text>
+    <text x="90" y="440" font-size="28" fill="#5e7d69">&gt; multi-chain wallet balance checker</text>
+    <text x="90" y="490" font-size="28" fill="#5e7d69">&gt; Solana · Robinhood Chain · Base · BSC</text>
+    <text x="90" y="560" font-size="28" fill="#c9f5d8">$GM · @GMwallet</text>
+  </g>
+</svg>
