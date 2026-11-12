@@ -221,7 +221,8 @@ textarea:focus { border-color: var(--net); }
 .m-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
 .m-progress { display: flex; align-items: center; gap: 12px; color: var(--mut); font-size: 12px; } .m-progress .progress { flex: 1; }
 .mt-head, .mt-row summary { display: grid; grid-template-columns: 34px minmax(150px, 1.4fr) repeat(var(--nn, 4), minmax(70px, 1fr)) 90px 110px; gap: 10px; align-items: center; padding: 9px 14px; font-size: 13px; }
-.m-table { --nn: 4; }
+.m-table { --nn: 4; overflow-x: auto; }
+.mt-head, .mt-row summary { min-width: calc(380px + var(--nn) * 84px); }
 .mt-head { color: var(--mut); font-size: 12px; border-bottom: 1px solid var(--line); }
 .mt-row { border-bottom: 1px solid var(--line); }
 .mt-row summary { cursor: pointer; list-style: none; } .mt-row summary::-webkit-details-marker { display: none; }

@@ -4,7 +4,7 @@
 
 - **Single check**: any wallet, free for everyone. No $GMW needed.
 - **Multi check**: up to 50 wallets per run, with combined totals and a CSV export. The connected wallet must hold **≥ 1,000,000 $GMW**.
-- **Balance checks always run on 5 networks**: Solana, Ethereum, Base, Robinhood Chain and BNB Smart Chain, whatever the mode.
+- **Balance checks always run on 5 networks**: Solana, Ethereum, Base, Robinhood Chain, BNB Smart Chain, Arbitrum, OP Mainnet and Arc, whatever the mode.
 - **CA display mode** (`single` / `multi`): decides which CAs are shown and the site theme. Single shows one network's CA; multi shows all 4 $GMW networks (Solana, Robinhood, Base, BSC).
 - **Contract address (CA)**: shown with network icons and a copy button in the top bar, the sidebar, the overview and the docs.
 - **Built-in docs** at `#/docs`.
@@ -32,14 +32,14 @@ Every brand, token and network setting lives in this one file.
 | `token.address` | CA shared by every EVM network (Robinhood, Base, BSC). Leave `""` until launch |
 | `token.sol` | Mint address on Solana. Leave `""` until launch |
 | `social.x` / `social.xHandle` | X account |
-| `checkNetworks` | Networks used for every balance check (default: solana, ethereum, base, robinhood, bsc) |
+| `checkNetworks` | Networks used for every balance check (default: solana, ethereum, base, robinhood, bsc, arbitrum, optimism, arc) |
 | `mode` | CA display: `"single"` shows only the CA of `singleNetwork` and themes the site for it. `"multi"` shows the CA for all 4 $GMW networks |
 | `singleNetwork` | `solana` \| `robinhood` \| `base` \| `bsc` |
 | `multiOrder` | CA network order in multi mode |
 | `comingSoon` | Upcoming features (name, icon, summary, points) shown with a "soon" tag. Remove an item when it launches |
 | `gate.enabled` / `gate.minHolding` | Multi-check access rule (default 1,000,000 GMW) |
 | `limits.maxWallets` / `limits.concurrency` | Multi-check limits |
-| `networks.<id>` | `checkOnly: true` = checked for balances but never shows a CA (Ethereum). Also `name`, `short`, `color`, `color2`, `tagline`, `icon`, `rpcUrls` (tried in order), `explorer`, `ca` (per-network override) |
+| `networks.<id>` | `checkOnly: true` = checked for balances but never shows a CA (Ethereum, Arbitrum, OP, Arc). `nativeUsd` = fixed price for a stablecoin gas token. Also `name`, `short`, `color`, `color2`, `tagline`, `icon`, `rpcUrls` (tried in order), `explorer`, `ca` (per-network override) |
 | `networks.bsc.tokens` | Tokens read on-chain for BSC, which has no free keyless indexer |
 
 Until a CA is set, the site shows "CA: TBA" and Multi check stays locked, because holdings can't be verified without it.
@@ -50,8 +50,9 @@ Until a CA is set, the site shows "CA: TBA" and Multi check stays locked, becaus
 |---|---|
 | Native balances | Public JSON-RPC of each network |
 | Solana tokens | RPC `getTokenAccountsByOwner` (SPL + Token-2022) |
-| Ethereum / Robinhood / Base tokens | Blockscout API v2 (`/api/v2/addresses/{addr}/tokens`) |
+| Ethereum / Base / Robinhood / Arbitrum / OP tokens | Blockscout API v2 (`/api/v2/addresses/{addr}/tokens`) |
 | BSC tokens | `balanceOf` on-chain for `networks.bsc.tokens` |
+| Arc | Native USDC balance (priced at $1). Add tokens to `networks.arc.tokens` to read more |
 | $GMW balance | Read on-chain from the CA |
 | USD prices | DexScreener `/tokens/v1/{chain}/{addresses}`, using the most liquid pair |
 

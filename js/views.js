@@ -153,7 +153,7 @@
             <div class="nc-h">${UI.netIcon(n, 26)}<div><b>${esc(n.name)}</b><span class="muted small">${esc(n.tagline)}</span></div></div>
             <dl><dt>type</dt><dd>${n.type === "solana" ? "SVM" : "EVM"}${n.chainId ? " · " + n.chainId : ""}</dd>
             <dt>native</dt><dd>${esc(n.native.symbol)}</dd>
-            <dt>tokens</dt><dd>${n.type === "solana" ? "all SPL + Token-2022" : n.tokenApi ? "all ERC-20 (Blockscout)" : "major tokens (on-chain)"}</dd>
+            <dt>tokens</dt><dd>${n.type === "solana" ? "all SPL + Token-2022" : n.tokenApi ? "all ERC-20 (Blockscout)" : (n.tokens || []).length ? "major tokens (on-chain)" : "native only"}</dd>
             <dt>explorer</dt><dd><a href="${esc(n.explorer)}" target="_blank" rel="noopener">${esc(n.explorer.replace(/^https?:\/\//, ""))}</a></dd></dl>
           </div>`).join("")}
         </div>
@@ -407,7 +407,7 @@
       ["networks", "Supported networks", `
         <table class="kv wide"><tr><th>Network</th><th>Type</th><th>Native</th><th>Token coverage</th><th>Explorer</th></tr>
         ${nets.map((n) => `<tr><td>${UI.netIcon(n, 14)} ${esc(n.name)}</td><td>${n.type === "solana" ? "SVM" : "EVM · " + n.chainId}</td><td>${esc(n.native.symbol)}</td>
-        <td>${n.type === "solana" ? "All SPL & Token-2022 accounts" : n.tokenApi ? "All ERC-20 via Blockscout" : "Major tokens: " + esc((n.tokens || []).map((t) => t.symbol).join(", "))}</td>
+        <td>${n.type === "solana" ? "All SPL & Token-2022 accounts" : n.tokenApi ? "All ERC-20 via Blockscout" : (n.tokens || []).length ? "Major tokens: " + esc(n.tokens.map((t) => t.symbol).join(", ")) : "Native balance (" + esc(n.native.symbol) + ")"}</td>
         <td><a href="${esc(n.explorer)}" target="_blank" rel="noopener">${esc(n.explorer.replace(/^https?:\/\//, ""))}</a></td></tr>`).join("")}</table>`],
       ["read", "Reading results", `
         <div class="legend">
@@ -420,7 +420,7 @@
         <p>Unpriced tokens are hidden by default — wallets often receive spam airdrops. Click "show" in a network group to reveal them. Never interact with tokens you don't recognise.</p>`],
       ["data", "Data sources", `
         <ul><li><b>Balances:</b> public JSON-RPC nodes of each network.</li>
-        <li><b>Token lists:</b> Solana RPC (SPL + Token-2022), Blockscout for Ethereum, Robinhood Chain and Base, direct on-chain reads for major BSC tokens.</li>
+        <li><b>Token lists:</b> Solana RPC (SPL + Token-2022), Blockscout for Ethereum, Base, Robinhood Chain, Arbitrum and OP, direct on-chain reads for major BSC tokens.</li>
         <li><b>Prices:</b> DexScreener public API — the most liquid pair of each token.</li></ul>
         <p>Public endpoints can be slow or rate-limited. If a network shows "!", wait a moment and check again.</p>`],
       ["safety", "Security & privacy", `

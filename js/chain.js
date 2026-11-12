@@ -207,7 +207,10 @@
         else if (t.indexerPrice) t.price = t.indexerPrice;
         t.usd = t.price != null ? Number(t.amount) * t.price : null;
       }
-      if (out.native && n.nativePrice) {
+      if (out.native && n.nativeUsd != null) {
+        out.native.price = n.nativeUsd;
+        out.native.usd = Number(out.native.amount) * n.nativeUsd;
+      } else if (out.native && n.nativePrice) {
         const p = (await Chain.prices(n.nativePrice.chain, [n.nativePrice.address]))[n.nativePrice.address.toLowerCase()];
         out.native.price = p ? p.price : null;
         out.native.usd = p ? Number(out.native.amount) * p.price : null;
