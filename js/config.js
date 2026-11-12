@@ -1,8 +1,3 @@
-/**
- * GM Wallet — site configuration.
- * Everything brand / token / network related lives here. Edit this file only;
- * no build step is needed (static site).
- */
 window.GM_CONFIG = {
   brand: {
     name: "GM Wallet",
@@ -15,9 +10,7 @@ window.GM_CONFIG = {
   token: {
     name: "GM",
     symbol: "GM",
-    /** CA shared by all EVM networks (Robinhood, Base, BSC). Leave "" until launch. */
     address: "",
-    /** Mint address on Solana. Leave "" until launch. */
     sol: "",
   },
 
@@ -27,11 +20,10 @@ window.GM_CONFIG = {
   },
 
   /**
-   * Site mode:
    *  "single" = only `singleNetwork` is shown and the whole site is themed for it
    *  "multi"  = always all 4 networks (Solana, Robinhood, Base, BSC), ordered by `multiOrder`
    */
-  mode: "multi",
+  mode: "single",
   singleNetwork: "robinhood", // robinhood | solana | base | bsc
   multiOrder: ["solana", "robinhood", "base", "bsc"],
 
