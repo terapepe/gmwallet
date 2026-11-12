@@ -9,16 +9,22 @@
   const Chain = {
     isSingle() { return CFG.mode !== "multi"; },
 
-    /** Active networks: single → 1, multi → all (ordered by multiOrder). */
+    /** CA networks (display + theme): single → 1, multi → all CA networks ordered by multiOrder. */
     list() {
-      if (Chain.isSingle()) return [Chain.get(CFG.networks[CFG.singleNetwork] ? CFG.singleNetwork : Object.keys(CFG.networks)[0])];
-      return [...new Set([...(CFG.multiOrder || []), ...Object.keys(CFG.networks)])].filter((id) => CFG.networks[id]).map(Chain.get);
+      const ids = Object.keys(CFG.networks).filter((id) => !CFG.networks[id].checkOnly);
+      if (Chain.isSingle()) return [Chain.get(ids.includes(CFG.singleNetwork) ? CFG.singleNetwork : ids[0])];
+      return [...new Set([...(CFG.multiOrder || []), ...ids])].filter((id) => ids.includes(id)).map(Chain.get);
     },
+    /** Networks used for balance checks — always the same, whatever the mode. */
+    checkList() {
+      return (CFG.checkNetworks || Object.keys(CFG.networks)).filter((id) => CFG.networks[id]).map(Chain.get);
+    },
+    isCA(id) { return Chain.list().some((n) => n.id === id); },
     get(id) { const n = CFG.networks[id]; return n ? { id, ...n } : null; },
 
     tokenAddress(id) {
       const n = CFG.networks[id];
-      if (!n) return "";
+      if (!n || !Chain.isCA(id)) return "";
       return (n.ca || (n.type === "solana" ? CFG.token.sol : CFG.token.address) || "").trim();
     },
     /** Networks sharing the same CA grouped together (multi: Robinhood/Base/BSC + Solana). */
@@ -39,8 +45,10 @@
       if (RE_SOL.test(a)) return "solana";
       return null;
     },
-    /** Active networks that can hold this address type. */
-    netsFor(type) { return Chain.list().filter((n) => n.type === type); },
+    /** Check networks that can hold this address type. */
+    netsFor(type) { return Chain.checkList().filter((n) => n.type === type); },
+    /** CA networks of this address type (used for the $GM holder gate). */
+    caNetsFor(type) { return Chain.list().filter((n) => n.type === type); },
 
     explorerAddr(id, a) { const n = CFG.networks[id]; return n.explorer + (n.explorerAddr || "/address/") + a; },
     explorerToken(id, a) { const n = CFG.networks[id]; return n.explorer + (n.explorerToken || "/token/") + a; },

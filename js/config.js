@@ -19,18 +19,22 @@ window.GM_CONFIG = {
     xHandle: "@GMwallet",
   },
 
+  /** Balance checks ALWAYS run on these networks, whatever the mode. */
+  checkNetworks: ["solana", "ethereum", "base", "robinhood", "bsc"],
+
   /**
-   *  "single" = only `singleNetwork` is shown and the whole site is themed for it
-   *  "multi"  = always all 4 networks (Solana, Robinhood, Base, BSC), ordered by `multiOrder`
+   * CA display mode (also sets the site theme):
+   *  "single" = only the CA of `singleNetwork` is shown, site themed for that network
+   *  "multi"  = CA shown for all 4 networks (Solana, Robinhood, Base, BSC), ordered by `multiOrder`
    */
   mode: "single",
-  singleNetwork: "robinhood", // robinhood | solana | base | bsc
+  singleNetwork: "robinhood", // robinhood | solana | base | bsc (CA networks)
   multiOrder: ["solana", "robinhood", "base", "bsc"],
 
   /** Multi-wallet check access rule. */
   gate: {
     enabled: true,
-    minHolding: 1000000, // GM required (summed across active networks of the connected wallet type)
+    minHolding: 1000000, // GM required (summed across the CA networks of the connected wallet type)
   },
 
   limits: {
@@ -60,6 +64,25 @@ window.GM_CONFIG = {
       tagline: "Lightning-fast and meme-native",
       icon: "assets/networks/solana.svg",
       ca: "", // overrides token.sol when set
+    },
+    ethereum: {
+      name: "Ethereum",
+      short: "ETH",
+      type: "evm",
+      chainId: 1,
+      checkOnly: true, // balance checks only — no $GM CA on this network
+      rpcUrls: ["https://ethereum-rpc.publicnode.com", "https://eth.llamarpc.com"],
+      explorer: "https://etherscan.io",
+      explorerAddr: "/address/",
+      explorerToken: "/token/",
+      native: { symbol: "ETH", name: "Ether", decimals: 18 },
+      nativePrice: { chain: "ethereum", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" },
+      dexChain: "ethereum",
+      tokenApi: { type: "blockscout", url: "https://eth.blockscout.com" },
+      color: "#8EA2FF",
+      color2: "#627EEA",
+      tagline: "The original smart-contract chain",
+      icon: "assets/networks/ethereum.svg",
     },
     robinhood: {
       name: "Robinhood Chain",

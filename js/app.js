@@ -13,7 +13,7 @@
       $("#brandName").textContent = CFG.brand.name;
       App.theme();
       let saved; try { saved = JSON.parse(localStorage.getItem(SEL) || "null"); } catch {}
-      const ids = Chain.list().map((n) => n.id);
+      const ids = Chain.checkList().map((n) => n.id);
       App.selected = new Set((saved || ids).filter((id) => ids.includes(id)));
       if (!App.selected.size) App.selected = new Set(ids);
 
@@ -41,7 +41,7 @@
     },
 
     renderShell() {
-      $("#netList").innerHTML = Chain.list().map((n) => `
+      $("#netList").innerHTML = Chain.checkList().map((n) => `
         <li><a href="#/docs/networks" title="${esc(n.tagline)}">
           <span class="caret">▸</span>${UI.netIcon(n, 16)}<span>${esc(n.name)}</span>
           <span class="net-type">${n.type === "solana" ? "SVM" : "EVM"}</span></a></li>`).join("");
@@ -71,14 +71,11 @@
       $("#tbCount").innerHTML = count != null && count !== "" ? `<span class="tri">▲</span> ${esc(count)}` : "";
     },
 
-    /** Network filter chips (multi mode, on check views). */
+    /** Network filter chips on check views (same 5 networks in every mode). */
     renderFilter() {
       const box = $("#tbFilter");
-      if (Chain.isSingle() || !["check", "multi"].includes(App.route)) {
-        box.innerHTML = Chain.isSingle() && App.route !== "docs" ? `<span class="chip on single">${UI.netIcon(Chain.list()[0], 14)} ${esc(Chain.list()[0].name)}</span>` : "";
-        return;
-      }
-      box.innerHTML = `<span class="chip ghost">+ Filter</span>` + Chain.list().map((n) =>
+      if (!["check", "multi"].includes(App.route)) { box.innerHTML = ""; return; }
+      box.innerHTML = `<span class="chip ghost">+ Filter</span>` + Chain.checkList().map((n) =>
         `<button class="chip${App.selected.has(n.id) ? " on" : ""}" data-net="${n.id}" style="--c:${n.color}">${UI.netIcon(n, 14)} ${esc(n.short)}</button>`).join("");
       $$("[data-net]", box).forEach((b) => b.onclick = () => {
         const id = b.dataset.net;
@@ -88,7 +85,7 @@
         window.dispatchEvent(new Event("nets:change"));
       });
     },
-    selectedIds() { return Chain.isSingle() ? Chain.list().map((n) => n.id) : [...App.selected]; },
+    selectedIds() { return [...App.selected]; },
 
     /* ---------- wallet ---------- */
     onWallet() {

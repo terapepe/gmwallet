@@ -23,7 +23,7 @@
 
     /** Wallet options for the picker, limited to the active network types. */
     options() {
-      const types = new Set(Chain.list().map((n) => n.type)), out = [];
+      const types = new Set(Chain.list().map((n) => n.type)), out = []; // wallets that can hold $GM
       if (types.has("evm")) {
         const list = [...evm.values()];
         if (!list.length && window.ethereum) list.push({ info: { name: "Browser Wallet", rdns: "injected", icon: "" }, provider: window.ethereum });
@@ -87,13 +87,13 @@
 
     /**
      * Gate status: idle | off | tba (CA not set) | checking | locked | open | error
-     * GM is summed across every active network matching the connected wallet type.
+     * GM is summed across every CA network matching the connected wallet type.
      */
     async checkGate() {
       const s = W.state, g = CFG.gate;
       if (!g.enabled) { s.gate = { status: "off", held: 0 }; return W.emit(); }
       if (!s.connected) { s.gate = { status: "idle", held: 0 }; return W.emit(); }
-      const nets = Chain.netsFor(s.type).filter((n) => Chain.tokenAddress(n.id));
+      const nets = Chain.caNetsFor(s.type).filter((n) => Chain.tokenAddress(n.id));
       if (!nets.length) { s.gate = { status: "tba", held: 0 }; return W.emit(); }
       s.gate = { status: "checking", held: 0 }; W.emit();
       const addr = s.address;

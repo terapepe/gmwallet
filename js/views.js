@@ -81,8 +81,8 @@
   /* ================= overview ================= */
 
   function home(v) {
-    App.setTitle("Overview", Chain.list().length + " network" + (Chain.list().length > 1 ? "s" : ""));
-    const nets = Chain.list(), single = Chain.isSingle(), n0 = nets[0];
+    const nets = Chain.checkList(), single = Chain.isSingle(), n0 = Chain.list()[0];
+    App.setTitle("Overview", nets.length + " networks");
     v.innerHTML = `
       ${single ? `<div class="net-banner">${UI.netIcon(n0, 22)}<div><b>${esc(n0.name)}</b> edition<span class="muted"> · ${esc(n0.tagline)}${n0.chainId ? " · chain id " + n0.chainId : ""}</span></div></div>` : ""}
 
@@ -94,10 +94,10 @@
         <div class="hero-copy">
           <img class="hero-logo" src="assets/logo.svg" alt="" width="64" height="64">
           <h2>${esc(CFG.brand.tagline)}</h2>
-          <p class="lead">${esc(CFG.brand.description)} Built for the <b>$${esc(SYM)}</b> community on ${nets.map((n) => esc(n.name)).join(", ").replace(/, ([^,]*)$/, " and $1")}.</p>
+          <p class="lead">${esc(CFG.brand.description)} Checks ${nets.map((n) => esc(n.name)).join(", ").replace(/, ([^,]*)$/, " and $1")} in one go. Built for the <b>$${esc(SYM)}</b> community.</p>
           <form class="qform" id="qform">
             <span class="pr">$</span>
-            <input id="qaddr" placeholder="paste a ${single ? (n0.type === "solana" ? "Solana" : "0x") : "0x… or Solana"} wallet address" autocomplete="off" spellcheck="false">
+            <input id="qaddr" placeholder="paste a 0x… or Solana wallet address" autocomplete="off" spellcheck="false">
             <button class="btn primary">Check</button>
           </form>
           <div class="hero-links">
@@ -119,7 +119,7 @@
           ${[
             ["$", "Single check", `Any wallet, any time. Free for everyone — no ${SYM} needed.`],
             ["#", "Multi check", `Up to ${CFG.limits.maxWallets} wallets in one run. For holders of ${UI.amt(MIN)} $${SYM}.`],
-            ["◎", "Multi-chain", single ? `Tuned for ${n0.name}: native coin, tokens and live prices.` : "Solana, Robinhood Chain, Base and BSC in one view. EVM addresses are checked on all EVM chains at once."],
+            ["◎", "Multi-chain", `${nets.map((n) => n.short).join(", ")} in one view. One 0x address is checked on every EVM chain at once.`],
             ["$", "Live USD value", "Prices from DexScreener, picked from the most liquid pair."],
             ["⛨", "Read-only & private", "No sign-ups, no signatures, no keys. Everything runs in your browser."],
             ["⇩", "CSV export", "Export multi-check results for spreadsheets, airdrops or tax notes."],
@@ -171,8 +171,9 @@
   function boot(el, nets) {
     const lines = [
       ["$ gm --version", ""], [`${CFG.brand.name} v1.0 · token $${SYM}`, "dim"],
-      [`$ gm networks --mode ${CFG.mode}`, ""],
+      [`$ gm networks`, ""],
       ...nets.map((n) => [`  ✓ ${n.name.padEnd(16)} ${n.type === "solana" ? "svm" : "evm:" + n.chainId}`, "ok"]),
+      [`$ gm ca --mode ${CFG.mode}`, ""], ...Chain.list().map((n) => [`  ${n.short.padEnd(10)} ${Chain.tokenAddress(n.id) ? UI.short(Chain.tokenAddress(n.id), 6) : "TBA"}`, "dim"]),
       [`$ gm access`, ""], ["  single check ........ free", "dim"], [`  multi check ......... ≥ ${UI.amt(MIN)} ${SYM}`, "dim"],
       ["$ gm", ""], ["gm ☀  ready.", "ok"],
     ];
@@ -190,11 +191,10 @@
 
   function check(v, arg) {
     App.setTitle("Single check", "");
-    const single = Chain.isSingle(), n0 = Chain.list()[0];
     v.innerHTML = `
       <form class="check-form" id="cform">
         <span class="pr">$ gm check</span>
-        <input id="addr" value="${esc(arg)}" placeholder="${single ? (n0.type === "solana" ? "Solana address" : "0x address") : "0x… (EVM) or Solana address"}" autocomplete="off" spellcheck="false">
+        <input id="addr" value="${esc(arg)}" placeholder="0x… (EVM) or Solana address" autocomplete="off" spellcheck="false">
         <button class="btn primary">Check</button>
       </form>
       <p class="hint" id="hint"></p>
@@ -203,7 +203,7 @@
       const a = $("#addr").value.trim(), t = Chain.addrType(a);
       $("#hint").innerHTML = !a ? `Free · no $${esc(SYM)} required · press <kbd>/</kbd> anywhere to jump here`
         : !t ? `<span class="err-t">not a valid address</span>`
-        : !Chain.netsFor(t).length ? `<span class="err-t">${t === "solana" ? "Solana" : "EVM"} addresses are not supported on ${esc(n0.name)}</span>`
+        : !Chain.netsFor(t).length ? `<span class="err-t">${t === "solana" ? "Solana" : "EVM"} addresses are not supported</span>`
         : `${t === "solana" ? "Solana" : "EVM"} address → will check: ${esc(netNames(t) || "—")}`;
     };
     $("#addr").oninput = hint; hint();
@@ -327,7 +327,7 @@
     const rows = results.map((s, i) => ({ s, i })).filter((x) => x.s);
     const tot = rows.reduce((t, { s }) => t + (s.totalUsd || 0), 0);
     const gm = rows.reduce((t, { s }) => t + (s.gm || 0), 0);
-    const nets = Chain.list().filter((n) => App.selectedIds().includes(n.id));
+    const nets = Chain.checkList().filter((n) => App.selectedIds().includes(n.id));
     box.style.setProperty("--nn", nets.length);
     box.innerHTML = `
       <div class="summary">
@@ -372,7 +372,7 @@
 
   function docs(v, arg) {
     App.setTitle("Docs", "");
-    const nets = Chain.list(), single = Chain.isSingle(), n0 = nets[0];
+    const nets = Chain.checkList(), cas = Chain.list();
     const S = [
       ["intro", "Introduction", `
         <p><b>${esc(CFG.brand.name)}</b> is a read-only wallet balance checker for ${nets.map((n) => esc(n.name)).join(", ")}. Paste any public wallet address and see its native coin, $${esc(SYM)} and token holdings with live USD values — grouped by network, in one terminal-style screen.</p>
@@ -380,23 +380,23 @@
       ["token", `The $${esc(SYM)} token`, `
         <p><b>$${esc(SYM)}</b> (${esc(CFG.token.name)}) is the community token behind ${esc(CFG.brand.name)}. Holding it unlocks power-user features — starting with Multi check.</p>
         <table class="kv"><tr><td>Name</td><td>${esc(CFG.token.name)}</td></tr><tr><td>Symbol</td><td>${esc(SYM)}</td></tr>
-        <tr><td>Networks</td><td>${nets.map((n) => UI.netIcon(n, 14) + " " + esc(n.short)).join(" &nbsp; ")}</td></tr>
+        <tr><td>Networks</td><td>${cas.map((n) => UI.netIcon(n, 14) + " " + esc(n.short)).join(" &nbsp; ")}</td></tr>
         <tr><td>Multi check access</td><td>≥ ${MIN.toLocaleString("en-US")} ${esc(SYM)}</td></tr></table>
         <div class="ca-grid">${UI.caBlock("card")}</div>
         <p class="note">Only trust the CA shown on this site and on <a href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${esc(CFG.social.xHandle)}</a>. Anyone can deploy a token called "GM".</p>`],
       ["start", "Quick start", `
         <ol class="steps"><li>Open <a href="#/check">Single check</a> (or press <kbd>/</kbd>).</li>
-        <li>Paste a public address — ${single ? (n0.type === "solana" ? "a Solana address" : "a 0x address") : "0x… for EVM or a base58 Solana address"}.</li>
+        <li>Paste a public address — 0x… for EVM or a base58 Solana address.</li>
         <li>Press <b>Check</b>. Results stream in network by network.</li></ol>
         <p>Every result has its own link (<code>#/check/&lt;address&gt;</code>) so you can bookmark or share it.</p>`],
       ["single", "Single check (free)", `
         <p>Single check is free for everyone and does not require holding $${esc(SYM)}.</p>
-        <ul><li><b>EVM address</b> (0x…) → checked on every active EVM network at once${single ? "" : " (Robinhood Chain, Base, BSC)"}.</li>
+        <ul><li><b>EVM address</b> (0x…) → checked on every EVM network at once (${esc(Chain.netsFor("evm").map((n) => n.name).join(", "))}).</li>
         <li><b>Solana address</b> → checked on Solana.</li>
-        ${single ? "" : `<li>Use the network chips in the top bar to include or exclude networks.</li>`}</ul>`],
+        <li>Use the network chips in the top bar to include or exclude networks.</li></ul>`],
       ["multi", "Multi check & holder access", `
         <p>Multi check scans up to <b>${CFG.limits.maxWallets} wallets</b> in one run and shows per-network values, combined totals and a CSV export.</p>
-        <p><b>Requirement:</b> the connected wallet must hold at least <b>${MIN.toLocaleString("en-US")} $${esc(SYM)}</b>. Balances are added up across all active networks of the same wallet type (EVM wallets: ${esc(Chain.netsFor("evm").map((n) => n.short).join(" + ") || "—")}; Solana wallets: ${esc(Chain.netsFor("solana").map((n) => n.short).join(" + ") || "—")}).</p>
+        <p><b>Requirement:</b> the connected wallet must hold at least <b>${MIN.toLocaleString("en-US")} $${esc(SYM)}</b>. Balances are added up across the $${esc(SYM)} networks of the same wallet type (EVM wallets: ${esc(Chain.caNetsFor("evm").map((n) => n.short).join(" + ") || "—")}; Solana wallets: ${esc(Chain.caNetsFor("solana").map((n) => n.short).join(" + ") || "—")}).</p>
         <ol class="steps"><li>Click <b>Connect</b> (top right) and pick your wallet.</li><li>${esc(CFG.brand.name)} reads your $${esc(SYM)} balance — no signature, no transaction.</li>
         <li>Paste wallets (one per line, EVM and Solana can be mixed) and press <b>Check all</b>.</li><li>Click a row to expand its full breakdown. Export with <b>CSV ⇩</b>.</li></ol>`],
       ["networks", "Supported networks", `
@@ -415,7 +415,7 @@
         <p>Unpriced tokens are hidden by default — wallets often receive spam airdrops. Click "show" in a network group to reveal them. Never interact with tokens you don't recognise.</p>`],
       ["data", "Data sources", `
         <ul><li><b>Balances:</b> public JSON-RPC nodes of each network.</li>
-        <li><b>Token lists:</b> Solana RPC (SPL + Token-2022), Blockscout for Robinhood Chain and Base, direct on-chain reads for major BSC tokens.</li>
+        <li><b>Token lists:</b> Solana RPC (SPL + Token-2022), Blockscout for Ethereum, Robinhood Chain and Base, direct on-chain reads for major BSC tokens.</li>
         <li><b>Prices:</b> DexScreener public API — the most liquid pair of each token.</li></ul>
         <p>Public endpoints can be slow or rate-limited. If a network shows "!", wait a moment and check again.</p>`],
       ["safety", "Security & privacy", `
