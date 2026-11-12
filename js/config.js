@@ -8,8 +8,8 @@ window.GM_CONFIG = {
   },
 
   token: {
-    name: "GM",
-    symbol: "GM",
+    name: "GMW",
+    symbol: "GMW",
     address: "",
     sol: "",
   },
@@ -34,7 +34,7 @@ window.GM_CONFIG = {
   /** Multi-wallet check access rule. */
   gate: {
     enabled: true,
-    minHolding: 1000000, // GM required (summed across the CA networks of the connected wallet type)
+    minHolding: 1000000, // GMW required (summed across the CA networks of the connected wallet type)
   },
 
   limits: {
@@ -70,7 +70,7 @@ window.GM_CONFIG = {
       short: "ETH",
       type: "evm",
       chainId: 1,
-      checkOnly: true, // balance checks only — no $GM CA on this network
+      checkOnly: true, // balance checks only — no $GMW CA on this network
       rpcUrls: ["https://ethereum-rpc.publicnode.com", "https://eth.llamarpc.com"],
       explorer: "https://etherscan.io",
       explorerAddr: "/address/",

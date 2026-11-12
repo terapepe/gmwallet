@@ -23,7 +23,7 @@
 
     /** Wallet options for the picker, limited to the active network types. */
     options() {
-      const types = new Set(Chain.list().map((n) => n.type)), out = []; // wallets that can hold $GM
+      const types = new Set(Chain.list().map((n) => n.type)), out = []; // wallets that can hold $GMW
       if (types.has("evm")) {
         const list = [...evm.values()];
         if (!list.length && window.ethereum) list.push({ info: { name: "Browser Wallet", rdns: "injected", icon: "" }, provider: window.ethereum });
@@ -87,7 +87,7 @@
 
     /**
      * Gate status: idle | off | tba (CA not set) | checking | locked | open | error
-     * GM is summed across every CA network matching the connected wallet type.
+     * GMW is summed across every CA network matching the connected wallet type.
      */
     async checkGate() {
       const s = W.state, g = CFG.gate;

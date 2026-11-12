@@ -47,7 +47,7 @@
     },
     /** Check networks that can hold this address type. */
     netsFor(type) { return Chain.checkList().filter((n) => n.type === type); },
-    /** CA networks of this address type (used for the $GM holder gate). */
+    /** CA networks of this address type (used for the $GMW holder gate). */
     caNetsFor(type) { return Chain.list().filter((n) => n.type === type); },
 
     explorerAddr(id, a) { const n = CFG.networks[id]; return n.explorer + (n.explorerAddr || "/address/") + a; },
@@ -89,7 +89,7 @@
       catch { return 18; }
     },
 
-    /** GM balance (number of whole tokens as decimal string) or null if CA not set. */
+    /** GMW balance (number of whole tokens as decimal string) or null if CA not set. */
     async gmBalance(id, owner) {
       const n = CFG.networks[id], ca = Chain.tokenAddress(id);
       if (!ca) return null;
@@ -187,7 +187,7 @@
         }
       } catch (e) { out.errors.push(`tokens: ${e.message}`); }
 
-      // 3) GM (always read directly so it shows even when the indexer misses it)
+      // 3) GMW (always read directly so it shows even when the indexer misses it)
       if (gmCa) {
         try {
           log(`${n.short}: ${CFG.token.symbol} balance`);

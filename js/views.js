@@ -383,7 +383,7 @@
         <tr><td>Networks</td><td>${cas.map((n) => UI.netIcon(n, 14) + " " + esc(n.short)).join(" &nbsp; ")}</td></tr>
         <tr><td>Multi check access</td><td>≥ ${MIN.toLocaleString("en-US")} ${esc(SYM)}</td></tr></table>
         <div class="ca-grid">${UI.caBlock("card")}</div>
-        <p class="note">Only trust the CA shown on this site and on <a href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${esc(CFG.social.xHandle)}</a>. Anyone can deploy a token called "GM".</p>`],
+        <p class="note">Only trust the CA shown on this site and on <a href="${esc(CFG.social.x)}" target="_blank" rel="noopener">${esc(CFG.social.xHandle)}</a>. Anyone can deploy a token called "${esc(SYM)}".</p>`],
       ["start", "Quick start", `
         <ol class="steps"><li>Open <a href="#/check">Single check</a> (or press <kbd>/</kbd>).</li>
         <li>Paste a public address — 0x… for EVM or a base58 Solana address.</li>
