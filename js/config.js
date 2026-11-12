@@ -10,7 +10,7 @@ window.GM_CONFIG = {
   token: {
     name: "GMW",
     symbol: "GMW",
-    address: "",
+    address: "0x874de2183152502e915000b3e7f652b5bebf1946",
     sol: "",
   },
 
