@@ -10,13 +10,13 @@ window.GM_CONFIG = {
   token: {
     name: "GMW",
     symbol: "GMW",
-    address: "0x874de2183152502e915000b3e7f652b5bebf1946",
+    address: "",
     sol: "",
   },
 
   social: {
-    x: "https://x.com/GMwallet",
-    xHandle: "@GMwallet",
+    x: "https://x.com/GM_wallet",
+    xHandle: "@GM_wallet",
   },
 
   /** Balance checks ALWAYS run on these networks, whatever the mode. */
