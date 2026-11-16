@@ -10,7 +10,7 @@ window.GM_CONFIG = {
   token: {
     name: "GM Wallet",
     symbol: "WGM",
-    address: "",
+    address: "0xAA2cD5645FcdE0d954c5C728FCa37d3F017fe8A0",
     sol: "",
   },
 
