@@ -8,30 +8,22 @@ window.GM_CONFIG = {
   },
 
   token: {
-    name: "GMW",
-    symbol: "GMW",
+    name: "GM Wallet",
+    symbol: "WGM",
     address: "",
     sol: "",
   },
 
   social: {
-    x: "https://x.com/GM_wallet",
-    xHandle: "@GM_wallet",
+    x: "https://x.com/GMwalletfun",
+    xHandle: "@GMwalletfun",
   },
 
-  /** Balance checks ALWAYS run on these networks, whatever the mode. */
   checkNetworks: ["solana", "ethereum", "base", "robinhood", "bsc", "arbitrum", "optimism", "arc"],
-
-  /**
-   * CA display mode (also sets the site theme):
-   *  "single" = only the CA of `singleNetwork` is shown, site themed for that network
-   *  "multi"  = CA shown for all 4 networks (Solana, Robinhood, Base, BSC), ordered by `multiOrder`
-   */
   mode: "single",
-  singleNetwork: "robinhood", // robinhood | solana | base | bsc (CA networks)
+  singleNetwork: "robinhood",
   multiOrder: ["solana", "robinhood", "base", "bsc"],
 
-  /** Upcoming features (shown with a "soon" tag in the sidebar, overview and docs). */
   comingSoon: [
     {
       id: "airdrop",
